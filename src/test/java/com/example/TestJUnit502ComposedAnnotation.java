@@ -16,6 +16,12 @@ class TestJUnit502ComposedAnnotation {
         System.out.println("No Tag Test");
     }
 
+    @Tag("my-tag")
+    @Test
+    void myTagTest() {
+        System.out.println("My Tag Test");
+    }
+
     @Fast
     @Test
     void fastTest() {

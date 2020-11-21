@@ -1,4 +1,15 @@
 # Introduction to junit5
+This repository contains code examples of JUnit 5 and the integration with third-party frameworks and technologies like:
+* Mockito (popular mock framework)
+* Cucumber (popular BDD style framework)
+
+### How to run tests
+`./gradlew test` runs all the junit tests
+`./gradlew cucumber` runs all the cucumber tests
+`./gradlew test --tests com.example.<YOUR_CLASS_NAME>` runs a specific test class
+
+### Requirements
+This project requires at least `Java 8`.
 
 ## How to install junit5
 ### Create a new gradle project
@@ -26,14 +37,43 @@ https://junit.org/junit5/docs/current/user-guide/
 ### Add Mockito
 https://www.baeldung.com/mockito-junit-5-extension
 
-        repositories {
-            jcenter()
+    repositories {
+        jcenter()
+    }
+    
+    dependencies {
+        testRuntimeOnly "org.mockito:mockito-core:2.23.0"
+        testCompileOnly "org.mockito:mockito-junit-jupiter:2.23.0"
+    }
+
+### Add Cucumber
+https://cucumber.io/docs/tools/java/
+
+    repositories {
+        jcenter()
+    }
+    
+    dependencies {
+        testImplementation 'io.cucumber:cucumber-java:6.9.0'
+        testImplementation 'io.cucumber:cucumber-junit-platform-engine:6.9.0'
+    }
+    
+    configurations {
+        cucumberRuntime {
+            extendsFrom testImplementation
         }
-        
-        dependencies {
-            testRuntimeOnly "org.mockito:mockito-core:2.23.0"
-            testCompileOnly "org.mockito:mockito-junit-jupiter:2.23.0"
+    }
+    
+    task cucumber() {
+        dependsOn assemble, testClasses
+        doLast {
+            javaexec {
+                main = "io.cucumber.core.cli.Main"
+                classpath = configurations.cucumberRuntime + sourceSets.main.output + sourceSets.test.output
+                args = ['--plugin', 'pretty', '--glue', 'com.example.cucumber', 'src/test/resources']
+            }
         }
+    }
 
 ### Add Lombok (not required)
 https://projectlombok.org/setup/gradle
@@ -48,7 +88,7 @@ https://projectlombok.org/setup/gradle
         
         testCompileOnly 'org.projectlombok:lombok:1.18.16'
         testAnnotationProcessor 'org.projectlombok:lombok:1.18.16'
-    }  
+    }
     
 ## How to use junit5
 #### 0. Platform
@@ -123,3 +163,6 @@ Display name works only if you use intellij runner and in the html report.
 
 #### 12. Mockito integration
     @ExtendWith(MockitoExtension.class)
+
+#### 13. Cucumber integration
+    @Cucumber

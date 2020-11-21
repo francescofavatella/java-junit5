@@ -8,6 +8,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 import java.lang.reflect.Method;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
@@ -24,7 +25,7 @@ class TestJUnit508DependencyInjectionForConstructorsAndMethods {
 
     @BeforeEach
     void init(TestInfo testInfo) {
-        List<String> names = List.of("TEST 1", "Test Random Parameter", "Test Random Parameter Wrong Type");
+        List<String> names = Arrays.asList("TEST 1", "Test Random Parameter", "Test Random Parameter Wrong Type");
         String displayName = testInfo.getDisplayName();
         assertTrue(names.contains(displayName));
     }
