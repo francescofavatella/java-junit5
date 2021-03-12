@@ -19,6 +19,9 @@ import static org.junit.jupiter.api.Assertions.*;
 @ExtendWith(TimingExtension.class)
 class TestJUnit508DependencyInjectionForConstructorsAndMethods {
 
+    @RegisterExtension
+    static LoggingExtension loggingExtension = new LoggingExtension("CustomName");
+
     TestJUnit508DependencyInjectionForConstructorsAndMethods(TestInfo testInfo) {
         assertEquals("TestInfo Demo", testInfo.getDisplayName());
     }
@@ -102,4 +105,31 @@ class TimingExtension implements BeforeTestExecutionCallback, AfterTestExecution
         return context.getStore(ExtensionContext.Namespace.create(getClass(), context.getRequiredTestMethod()));
     }
 
+}
+
+class LoggingExtension implements BeforeAllCallback, BeforeEachCallback {
+
+    private final String name;
+
+    public LoggingExtension(String name) {
+        this.name = name;
+    }
+
+    public LoggingExtension() {
+        this.name = "DefaultName";
+    }
+
+    @Override
+    public void beforeAll(ExtensionContext extensionContext) {
+        System.out.println("Log name " + getName() + " In beforeAll : " + extensionContext.getDisplayName());
+    }
+
+    @Override
+    public void beforeEach(ExtensionContext extensionContext) throws Exception {
+        System.out.println("Type name " + getName() + " In beforeEach : " + extensionContext.getDisplayName());
+    }
+
+    public String getName() {
+        return name;
+    }
 }

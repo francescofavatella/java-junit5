@@ -151,6 +151,7 @@ Display name works only if you use intellij runner and in the html report.
     TestInfo
     Custom params
     @ExtendWith
+    @RegisterExtension
     
 #### 9. Timeout Test
     @Timeout
